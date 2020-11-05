@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 import { getToken, clearToken } from "./api";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Auth from "./components/Auth";
 
 const App = () => {
   // a piece of state that represents the status of the current user
@@ -24,10 +23,7 @@ const App = () => {
           </button>
         </>
       ) : (
-        <>
-          <Register setIsLoggedIn={setIsLoggedIn} />
-          <Login setIsLoggedIn={setIsLoggedIn} />
-        </>
+        <Auth setIsLoggedIn={setIsLoggedIn} />
       )}
     </div>
   );
