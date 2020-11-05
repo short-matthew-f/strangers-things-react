@@ -27,7 +27,7 @@ export const registerUser = async (username, password) => {
     }),
   });
 
-  const { success, error, data } = await response.json();
+  const { error, data } = await response.json();
 
   if (error) {
     throw Error(error.message);
@@ -54,7 +54,7 @@ export const loginUser = async (username, password) => {
     }),
   });
 
-  const { success, error, data } = await response.json();
+  const { error, data } = await response.json();
 
   if (error) {
     throw Error(error.message);
