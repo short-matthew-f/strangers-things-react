@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { loginUser, registerUser } from "../api";
+import { auth } from "../api";
 
 const Auth = (props) => {
   const { setIsLoggedIn } = props;
@@ -28,7 +28,7 @@ const Auth = (props) => {
       <button
         onClick={async (event) => {
           try {
-            const result = await registerUser(username, password);
+            const result = await auth(username, password, true);
             setIsLoggedIn(true);
           } catch (error) {
             setErrorMessage(error.message);
@@ -40,7 +40,7 @@ const Auth = (props) => {
       <button
         onClick={async (event) => {
           try {
-            const result = await loginUser(username, password);
+            const result = await auth(username, password);
             setIsLoggedIn(true);
           } catch (error) {
             setErrorMessage(error.message);
