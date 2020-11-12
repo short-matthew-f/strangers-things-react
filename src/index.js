@@ -11,9 +11,31 @@ const App = () => {
   // a piece of state that represents the status of the current user
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
   const [postList, setPostList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isRecent, setIsRecent] = useState(false);
 
   function addNewPost(newPost) {
-    setPostList([newPost, ...postList]);
+    setPostList([...postList, newPost]);
+  }
+
+  function filteredPosts() {
+    const postsFilteredBySearchTerm = postList.filter((post) => {
+      return post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    const postsFilteredByRecency = postsFilteredBySearchTerm.filter((post) => {
+      if (!isRecent) {
+        return true;
+      }
+
+      const postTime = Date.parse(post.createdAt); // this is a timedate string...
+      const nowTime = Date.now();
+      const TWO_HOURS = 1000 * 60 * 60 * 4; // in milliseconds
+
+      return postTime + TWO_HOURS >= nowTime; // was the post within the last two hours
+    });
+
+    return postsFilteredByRecency.reverse();
   }
 
   useEffect(() => {
@@ -59,8 +81,25 @@ const App = () => {
         ) : (
           <Auth setIsLoggedIn={setIsLoggedIn} />
         )}
+        {/* Search bar outside of logged in/not logged in */}
+        <div className="filter-options">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="filter your posts"
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={isRecent}
+              onChange={() => setIsRecent(!isRecent)}
+            />
+            Recent Posts Only
+          </label>
+        </div>
       </header>
-      <PostList postList={postList} />
+      <PostList postList={filteredPosts()} />
       {isLoggedIn ? <PostForm addNewPost={addNewPost} /> : null}
     </div>
   );
